@@ -22,5 +22,12 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Printf("connected. user address: %s\n", h.GetUserAddress())
+	imageMD5 := "FBE1ADD84935782493030FF335475D81"
+
+	i, err := h.QueryImage(ctx, imageMD5)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Printf("%+v\n", i)
 }
