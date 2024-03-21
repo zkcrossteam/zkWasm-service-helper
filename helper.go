@@ -4,6 +4,8 @@ import (
 	"context"
 	"crypto/ecdsa"
 	"fmt"
+	"strings"
+
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
@@ -37,8 +39,8 @@ func New(zkWasmEndpoint, ethEndpoint, privateKey, contractAddress string) (*ZkWa
 func NewWithContext(ctx context.Context, zkWasmEndpoint, ethEndpoint, privateKey, contractAddress string) (*ZkWasmServiceHelper, error) {
 	h := &ZkWasmServiceHelper{}
 
-	h.zkWasmEndpoint = zkWasmEndpoint
-	h.ethEndpoint = ethEndpoint
+	h.zkWasmEndpoint = strings.TrimSuffix(zkWasmEndpoint, "/")
+	h.ethEndpoint = strings.TrimSuffix(ethEndpoint, "/")
 
 	ethC, err := ethclient.DialContext(ctx, h.ethEndpoint)
 	if err != nil {
