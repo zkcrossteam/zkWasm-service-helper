@@ -13,9 +13,10 @@ import (
 )
 
 const (
-	endpointImage = "/image"
-	endpointTasks = "/tasks"
-	endpointProve = "/prove"
+	endpointImage       = "/image"
+	endpointImageBinary = "/imagebinary"
+	endpointTasks       = "/tasks"
+	endpointProve       = "/prove"
 
 	headerSignatureKey = "x-eth-signature"
 )
