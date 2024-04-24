@@ -17,6 +17,7 @@ const (
 	endpointImageBinary = "/imagebinary"
 	endpointTasks       = "/tasks"
 	endpointProve       = "/prove"
+	endpointSetup       = "/setup"
 
 	headerSignatureKey = "x-eth-signature"
 )
@@ -70,14 +71,18 @@ func (h *ZkWasmServiceHelper) genFullSignMessage(message string) string {
 	return fmt.Sprintf("\x19Ethereum Signed Message:\n%d%s", len(message), message)
 }
 
-func (h *ZkWasmServiceHelper) signMessage(message string) (string, error) {
+func (h *ZkWasmServiceHelper) signMessage(message string, legacyV bool) (string, error) {
 	fullMessage := h.genFullSignMessage(message)
-
 	hash := crypto.Keccak256Hash([]byte(fullMessage))
 
 	sign, err := crypto.Sign(hash.Bytes(), h.wallet)
 	if err != nil {
 		return "", err
+	}
+
+	// https://github.com/ethereum/go-ethereum/issues/19751
+	if legacyV {
+		sign[64] += 27
 	}
 
 	return hexutil.Encode(sign), nil

@@ -29,6 +29,10 @@ func (h *ZkWasmServiceHelper) QueryImageBinary(ctx context.Context, md5 string) 
 		return nil, err
 	}
 
+	if resp.StatusCode != http.StatusOK {
+		return nil, errors.New(string(body))
+	}
+
 	response := &Response[[]byte]{}
 	if err := json.Unmarshal(body, response); err != nil {
 		return nil, errors.New(err.Error() + ": " + string(body))
