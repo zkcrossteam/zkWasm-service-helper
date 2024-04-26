@@ -59,7 +59,7 @@ type ProvingResult struct {
 
 func (h *ZkWasmServiceHelper) AddProvingTask(ctx context.Context, params *ProvingParams) (string, error) {
 	signMsg := params.buildSignMessage()
-	sign, err := h.signMessage(signMsg)
+	sign, err := h.signMessage(signMsg, false)
 	if err != nil {
 		return "", err
 	}
@@ -112,6 +112,10 @@ func (h *ZkWasmServiceHelper) AddProvingTask(ctx context.Context, params *Provin
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return "", err
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return "", errors.New(string(body))
 	}
 
 	result := &Response[*ProvingResult]{}

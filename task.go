@@ -84,6 +84,10 @@ func (h *ZkWasmServiceHelper) LoadTasks(ctx context.Context, query *TaskQueryPar
 		return nil, err
 	}
 
+	if resp.StatusCode != http.StatusOK {
+		return nil, errors.New(string(body))
+	}
+
 	result := &Response[*PaginationResult[*Task]]{}
 	if err := json.Unmarshal(body, result); err != nil {
 		return nil, err
