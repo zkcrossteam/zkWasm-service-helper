@@ -2,7 +2,7 @@ module github.com/zkcrossteam/zkWasm-service-helper
 
 go 1.20
 
-require github.com/ethereum/go-ethereum v1.13.14
+require github.com/ethereum/go-ethereum v1.13.15
 
 require (
 	github.com/Microsoft/go-winio v0.6.1 // indirect
