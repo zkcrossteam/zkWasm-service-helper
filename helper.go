@@ -3,9 +3,9 @@ package zkwasm
 import (
 	"context"
 	"crypto/ecdsa"
-	"fmt"
 	"strings"
 
+	"github.com/ethereum/go-ethereum/accounts"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
@@ -67,15 +67,10 @@ func (h *ZkWasmServiceHelper) GetUserAddress() string {
 	return h.userAddress.Hex()
 }
 
-func (h *ZkWasmServiceHelper) genFullSignMessage(message string) string {
-	return fmt.Sprintf("\x19Ethereum Signed Message:\n%d%s", len(message), message)
-}
-
 func (h *ZkWasmServiceHelper) signMessage(message string, legacyV bool) (string, error) {
-	fullMessage := h.genFullSignMessage(message)
-	hash := crypto.Keccak256Hash([]byte(fullMessage))
+	hash := accounts.TextHash([]byte(message))
 
-	sign, err := crypto.Sign(hash.Bytes(), h.wallet)
+	sign, err := crypto.Sign(hash, h.wallet)
 	if err != nil {
 		return "", err
 	}
