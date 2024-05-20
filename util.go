@@ -1,6 +1,8 @@
 package zkwasm
 
 import (
+	"encoding/binary"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -29,6 +31,16 @@ func BuildInputsString(input []any) ([]string, error) {
 			}
 
 			return nil, ErrUnsupportedInputType
+		case []byte:
+			hexStr := hex.EncodeToString(ti)
+			arr = append(arr, fmt.Sprintf("0x%s:bytes", hexStr))
+		case []uint64:
+			buf := make([]byte, 0, len(ti)*8)
+			for _, u := range ti {
+				buf = binary.LittleEndian.AppendUint64(buf, u)
+			}
+			hexStr := hex.EncodeToString(buf)
+			arr = append(arr, fmt.Sprintf("0x%s:bytes-packed", hexStr))
 		default:
 			return nil, ErrUnsupportedInputType
 		}
