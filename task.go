@@ -38,6 +38,7 @@ type Task struct {
 	Proof             []byte   `json:"proof"`
 	Aux               []byte   `json:"aux"`
 	ExternalHostTable []byte   `json:"external_host_table"`
+	ShadowInstances   []byte   `json:"shadow_instances"`
 	BatchInstances    []byte   `json:"batch_instances"`
 	Instances         []byte   `json:"instances"`
 	PublicInputs      []string `json:"public_inputs"`
@@ -53,7 +54,10 @@ type Task struct {
 	StatusMessage     string
 	InternalMessage   string
 	// task_verification_data: TaskVerificationData;
-	DebugLogs string
+	DebugLogs       string
+	ProofSubmitMode string `json:"proof_submit_mode"`
+	// batch_proof_data?: BatchProofData;
+	AutoSubmitStatus string `json:"auto_submit_status"`
 }
 
 func (h *ZkWasmServiceHelper) LoadTasks(ctx context.Context, query *TaskQueryParams) (*PaginationResult[*Task], error) {
