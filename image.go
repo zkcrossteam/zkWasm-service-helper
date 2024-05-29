@@ -27,7 +27,7 @@ const (
 	ImageStatusInitialized = "Initialized"
 	ImageStatusVerified    = "Verified"
 
-	ImageCircuitSizeDefault = 18
+	ImageCircuitSizeDefault = 22
 )
 
 type Image struct {
