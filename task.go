@@ -10,12 +10,13 @@ import (
 )
 
 const (
-	TaskStatusPending      = "Pending"
-	TaskStatusProcessing   = "Processing"
-	TaskStatusDryRunFailed = "DryRunFailed"
-	TaskStatusDone         = "Done"
-	TaskStatusFail         = "Fail"
-	TaskStatusStale        = "Stale"
+	TaskStatusPending       = "Pending"
+	TaskStatusProcessing    = "Processing"
+	TaskStatusDryRunSuccess = "DryRunSuccess"
+	TaskStatusDryRunFailed  = "DryRunFailed"
+	TaskStatusDone          = "Done"
+	TaskStatusFail          = "Fail"
+	TaskStatusStale         = "Stale"
 )
 
 type TaskQueryParams struct {
