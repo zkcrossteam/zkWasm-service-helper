@@ -31,6 +31,18 @@ func BuildInputsString(input []any) ([]string, error) {
 			}
 
 			return nil, ErrUnsupportedInputType
+		case int64:
+			arr = append(arr, fmt.Sprintf("%d:i64", ti))
+		case uint64:
+			arr = append(arr, fmt.Sprintf("%d:i64", ti))
+		case int:
+			arr = append(arr, fmt.Sprintf("%d:i64", ti))
+		case uint:
+			arr = append(arr, fmt.Sprintf("%d:i64", ti))
+		case int32:
+			arr = append(arr, fmt.Sprintf("%d:i64", ti))
+		case uint32:
+			arr = append(arr, fmt.Sprintf("%d:i64", ti))
 		case []byte:
 			hexStr := hex.EncodeToString(ti)
 			arr = append(arr, fmt.Sprintf("0x%s:bytes", hexStr))
