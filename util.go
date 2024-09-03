@@ -8,6 +8,10 @@ import (
 	"fmt"
 	"math/big"
 	"slices"
+	"strconv"
+	"strings"
+
+	"github.com/ethereum/go-ethereum/common/hexutil"
 )
 
 var (
@@ -106,4 +110,66 @@ func ByteSliceToBigIntSlice(input []byte, le bool) []*big.Int {
 	}
 
 	return output
+}
+
+func ParseInputsString(inputs []string) ([]uint64, error) {
+	re := make([]uint64, 0, len(inputs))
+
+	for _, i := range inputs {
+		fmtErr := fmt.Errorf("illegal input string: %s", i)
+
+		arr := strings.SplitN(i, ":", 2)
+		if len(arr) != 2 {
+			return nil, fmtErr
+		}
+
+		v := arr[0]
+		t := arr[1]
+
+		switch t {
+		case "i64":
+			if strings.HasPrefix(v, "0x") {
+				d, err := hexutil.DecodeUint64(v)
+				if err != nil {
+					return nil, fmtErr
+				}
+				re = append(re, d)
+			} else {
+				d, err := strconv.ParseUint(v, 10, 64)
+				if err != nil {
+					return nil, fmtErr
+				}
+				re = append(re, d)
+			}
+		case "bytes":
+			if !strings.HasPrefix(v, "0x") {
+				return nil, fmtErr
+			}
+			bytes, err := hexutil.Decode(v)
+			if err != nil {
+				return nil, fmtErr
+			}
+			for _, b := range bytes {
+				re = append(re, uint64(b))
+			}
+		case "bytes-packed":
+			if !strings.HasPrefix(v, "0x") {
+				return nil, fmtErr
+			}
+			bytes, err := hexutil.Decode(v)
+			if err != nil {
+				return nil, fmtErr
+			}
+
+			bytesArr := ChunkSlice(bytes, 8)
+			for _, n := range bytesArr {
+				re = append(re, binary.LittleEndian.Uint64(n))
+			}
+		// TODO: support "file"
+		default:
+			return nil, fmtErr
+		}
+	}
+
+	return re, nil
 }
