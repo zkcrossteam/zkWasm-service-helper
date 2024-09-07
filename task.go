@@ -74,6 +74,15 @@ func (h *ZkWasmServiceHelper) LoadTasks(ctx context.Context, query *TaskQueryPar
 	if query.Total != 0 {
 		q.Add("total", strconv.FormatInt(query.Total, 10))
 	}
+	if query.MD5 != "" {
+		q.Add("md5", query.MD5)
+	}
+	if query.TaskType != "" {
+		q.Add("tasktype", query.TaskType)
+	}
+	if query.TaskStatus != "" {
+		q.Add("taskstatus", query.TaskStatus)
+	}
 	// TODO: other params
 
 	req.URL.RawQuery = q.Encode()
