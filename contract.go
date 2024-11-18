@@ -14,8 +14,12 @@ const (
 	verifyABIJSON = `
 [
   {
-    "inputs":
-    [
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "tx_data",
+        "type": "bytes"
+      },
       {
         "internalType": "uint256[]",
         "name": "proof",
@@ -33,28 +37,34 @@ const (
       },
       {
         "internalType": "uint256[][]",
-        "name": "target_instance",
+        "name": "instances",
         "type": "uint256[][]"
       }
     ],
     "name": "verify",
     "outputs": [],
-    "stateMutability": "view",
+    "stateMutability": "nonpayable",
     "type": "function"
   }
 ]
 `
 )
 
-func (h *ZkWasmServiceHelper) ContractVerify(ctx context.Context,
-	proof []byte, verifyInstance []byte, aux []byte, targetInstance []byte) (string, error) {
+func (h *ZkWasmServiceHelper) ContractVerify(ctx context.Context, txData []byte,
+	proof []byte, verifyInstance []byte, aux []byte, instances []byte) (string, error) {
 
 	verifyABI, err := abi.JSON(strings.NewReader(verifyABIJSON))
 	if err != nil {
 		return "", err
 	}
 
-	data, err := verifyABI.Pack("verify", ByteSliceToBigIntSlice(proof, true), ByteSliceToBigIntSlice(verifyInstance, true), ByteSliceToBigIntSlice(aux, true), [][]*big.Int{ByteSliceToBigIntSlice(targetInstance, true)})
+	data, err := verifyABI.Pack("verify",
+		txData,
+		ByteSliceToBigIntSlice(proof, true),
+		ByteSliceToBigIntSlice(verifyInstance, true),
+		ByteSliceToBigIntSlice(aux, true),
+		[][]*big.Int{ByteSliceToBigIntSlice(instances, true)}
+	)
 	if err != nil {
 		fmt.Println(err)
 		return "", err
