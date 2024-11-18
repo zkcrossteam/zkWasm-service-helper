@@ -63,7 +63,7 @@ func (h *ZkWasmServiceHelper) ContractVerify(ctx context.Context, txData []byte,
 		ByteSliceToBigIntSlice(proof, true),
 		ByteSliceToBigIntSlice(verifyInstance, true),
 		ByteSliceToBigIntSlice(aux, true),
-		[][]*big.Int{ByteSliceToBigIntSlice(instances, true)}
+		[][]*big.Int{ByteSliceToBigIntSlice(instances, true)},
 	)
 	if err != nil {
 		fmt.Println(err)
